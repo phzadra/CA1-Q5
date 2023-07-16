@@ -5,6 +5,7 @@
 
 static DevI2C devI2c(PB_11,PB_10);
 static LSM6DSLSensor acc_gyro(&devI2c,0xD4,D4,D5); // high address
+DigitalOut led1(LED1);
 
 float computeAngle(int x, int y, int z){
     float fx = (float) x;                       //Cast int x to float fx
@@ -12,6 +13,12 @@ float computeAngle(int x, int y, int z){
     float fz = (float) z;                       //Cast int z to float fz
     float pitch = 0;
     float res = 0;
+
+    if (x > -15 && x < 15 && y > -15 && y < 15 && z > 990 && z < 1020){
+        led1 = 1;
+    }
+    else
+        led1=0;
     
     pitch = atan(-fx/(sqrt((fy*fy)+(fz*fz))));  //All rotations are counter-clockwise with respect to the axis, hence -fx
     res = pitch * (180/PI);                     //Convert from radians to degress
